@@ -8,12 +8,16 @@ function initializeCanvas(theme, cb) {
   // Fonts pre-registered in bin/worker
   var renderer = getRenderer(theme);
 
-  if (!theme.backgroundImage) {
+  if (!(theme.backgroundImage || theme.customBackgroundImage)) {
     return cb(null, renderer);
   }
 
+  backgroundImagePath = theme.customBackgroundImage
+    ? theme.customBackgroundImage
+    : path.join(__dirname, "..", "settings", "backgrounds", theme.backgroundImage);
+
   // Load background image from file (done separately so renderer code can work in browser too)
-  fs.readFile(path.join(__dirname, "..", "settings", "backgrounds", theme.backgroundImage), function(err, raw){
+  fs.readFile(backgroundImagePath, function(err, raw) {
 
     if (err) {
       return cb(err);

@@ -17,8 +17,12 @@ function validate(req, res, next) {
 
   }
 
-  if (!req.file || !req.file.filename) {
+  if (!req.files.audio || !req.files.audio[0].filename) {
     return res.status(500).send("No valid audio received.");
+  }
+
+  if(req.files.backgroundImage && req.files.backgroundImage[0].filename) {
+    req.body.theme.customBackgroundImage = req.files.backgroundImage[0].path;
   }
 
   // Start at the beginning, or specified time
@@ -36,9 +40,9 @@ function validate(req, res, next) {
 
 function route(req, res) {
 
-  var id = req.file.destination.split(path.sep).pop();
+  var id = req.files.audio[0].destination.split(path.sep).pop();
 
-  transports.uploadAudio(path.join(req.file.destination, "audio"), "audio/" + id,function(err) {
+  transports.uploadAudio(path.join(req.files.audio[0].destination, "audio"), "audio/" + id,function(err) {
 
     if (err) {
       throw err;

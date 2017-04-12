@@ -25,15 +25,21 @@ app.use(logger.morgan());
 var fileOptions = {
   storage: multer.diskStorage({
     destination: function(req, file, cb) {
-
-      var dir = path.join(serverSettings.workingDirectory, uuid.v1());
-
-      mkdirp(dir, function(err) {
-        return cb(err, dir);
-      });
+      if(file.fieldname === "audio") {
+        var dir = path.join(serverSettings.workingDirectory, uuid.v1());
+        mkdirp(dir, function(err) {
+          return cb(err, dir);
+        });
+      } else {
+        cb(null, serverSettings.workingDirectory);
+      }
     },
     filename: function(req, file, cb) {
-      cb(null, "audio");
+      if(file.fieldname === "audio") {
+        cb(null, "audio");
+      } else {
+        cb(null, uuid.v1());
+      }
     }
   })
 };
@@ -45,7 +51,7 @@ if (serverSettings.maxUploadSize) {
 }
 
 // On submission, check upload, validate input, and start generating a video
-app.post("/submit/", [multer(fileOptions).single("audio"), render.validate, render.route]);
+app.post("/submit/", [multer(fileOptions).fields([{name: "audio", maxCount: 1}, {name: "backgroundImage", maxCount: 1}], {}), render.validate, render.route]);
 
 // If not using S3, serve videos locally
 if (!serverSettings.s3Bucket) {

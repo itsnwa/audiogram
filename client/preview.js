@@ -11,10 +11,16 @@ var context = d3.select("canvas").node().getContext("2d");
 var theme,
     caption,
     file,
+    backgroundFile,
+    backgroundFileCanvasImage,
     selection;
 
 function _file(_) {
   return arguments.length ? (file = _) : file;
+}
+
+function _backgroundFile(_) {
+  return arguments.length ? (backgroundFile = _) : backgroundFile;
 }
 
 function _theme(_) {
@@ -76,7 +82,7 @@ function redraw() {
 
   var renderer = getRenderer(theme);
 
-  renderer.backgroundImage(theme.backgroundImageFile || null);
+  renderer.backgroundImage(backgroundFileCanvasImage || theme.backgroundImageFile || null);
 
   renderer.drawFrame(context, {
     caption: caption,
@@ -106,10 +112,30 @@ function loadAudio(f, cb) {
 
 }
 
+function loadBackgroundImage(f, cb) {
+  var reader;
+  backgroundFile = f;
+  if(backgroundFile) {
+    reader = new FileReader();
+    reader.readAsDataURL(backgroundFile);
+    reader.onload = function(event) {
+      backgroundFileCanvasImage = new Image();
+      backgroundFileCanvasImage.src = event.target.result;
+      redraw();
+      cb(null);
+    }
+  } else {
+    backgroundFileCanvasImage = null;
+    redraw();
+  }
+}
+
 module.exports = {
   caption: _caption,
   theme: _theme,
   file: _file,
+  backgroundFile: _backgroundFile,
   selection: _selection,
-  loadAudio: loadAudio
+  loadAudio: loadAudio,
+  loadBackgroundImage: loadBackgroundImage
 };

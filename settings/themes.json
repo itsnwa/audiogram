@@ -90,16 +90,13 @@
     "foregroundColor": "#c02942",
     "pattern": "pixel"
   },
-  "Square with background image": {
-    "width": 640,
-    "height": 640,
+  "Spotify": {
+    "width": 1280,
+    "height": 720,
     "samplesPerFrame": 64,
-    "waveTop": 20,
-    "waveBottom": 300,
-    "captionTop": 340,
-    "captionLeft": 20,
-    "captionRight": 620,
+    "waveTop": 400,
+    "waveBottom": 500,
     "foregroundColor": "#0eb8ba",
-    "backgroundImage": "nyc.png"
+    "backgroundImage": "placeholder.jpg"
   }
 }

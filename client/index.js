@@ -42,6 +42,7 @@ function submitted() {
   var theme = preview.theme(),
       caption = preview.caption(),
       selection = preview.selection(),
+      backgroundFile = preview.backgroundFile(),
       file = preview.file();
 
   if (!file) {
@@ -63,6 +64,7 @@ function submitted() {
   var formData = new FormData();
 
   formData.append("audio", file);
+  formData.append("backgroundImage", backgroundFile);
   if (selection.start || selection.end) {
     formData.append("start", selection.start);
     formData.append("end", selection.end);
@@ -173,6 +175,7 @@ function initialize(err, themesWithImages) {
 
   // If there's an initial piece of audio (e.g. back button) load it
   d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
+  d3.select("#input-background-image").on("change", updateBackgroundFile).each(updateBackgroundFile);
 
   d3.select("#return").on("click", function(){
     d3.event.preventDefault();
@@ -216,6 +219,14 @@ function updateAudioFile() {
 
   });
 
+}
+
+function updateBackgroundFile() {
+  preview.loadBackgroundImage(this.files[0], function(err) {
+    if(err) {
+      console.warn(err);
+    }
+  })
 }
 
 function updateCaption() {
