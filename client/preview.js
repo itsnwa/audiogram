@@ -120,9 +120,11 @@ function loadBackgroundImage(f, cb) {
     reader.readAsDataURL(backgroundFile);
     reader.onload = function(event) {
       backgroundFileCanvasImage = new Image();
+      backgroundFileCanvasImage.onload = function(event) {
+        redraw();
+        cb(null);
+      }
       backgroundFileCanvasImage.src = event.target.result;
-      redraw();
-      cb(null);
     }
   } else {
     backgroundFileCanvasImage = null;
