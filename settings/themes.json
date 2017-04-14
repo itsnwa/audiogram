@@ -3,10 +3,11 @@
     "width": 1280,
     "height": 720,
     "samplesPerFrame": 64,
-    "waveTop": 460,
-    "waveBottom": 620,
+    "waveTop": 480,
+    "waveBottom": 720,
     "foregroundColor": "#0eb8ba",
     "backgroundImage": "placeholder.jpg",
+    "pattern": "burst",
     "framesPerSecond": 20
   }
 }
